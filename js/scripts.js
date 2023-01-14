@@ -47,9 +47,29 @@ let pokemonRepository = (function() {
         return pokemonList;
     }
 
+    function addListItem (pokemon) {
+        //index file has a list class with this name pokemon-list
+        let repository = document.querySelector(".pokemon-list"); 
+        let listPokemon = document.createElement("li");
+        let button = document.createElement("button");
+        button.innerText = pokemon.name;
+        //css file has setting for this button under button-class
+        button.classList.add("button-class"); 
+        //added event listener: returns all pokemon info to console when button is clicked
+        button.addEventListener("click", (Event) => showDetails(pokemon));
+        listPokemon.appendChild(button);
+        repository.appendChild(listPokemon);
+    }
+
+    // this logs data in console, later task this function will be expanded
+    function showDetails(pokemon){
+        console.log(pokemon);
+      }
+
     return {
         add: add,
-        getAll: getAll
+        getAll: getAll,
+        addListItem: addListItem
     };
 
 }) ();
@@ -59,17 +79,6 @@ pokemonRepository.add({ name: 'Floragato', height: 0.9, type: ['Grass'] });
 pokemonRepository.add({ name: 'Crocalor', height: 1.0, type: ['Fire'] });
 pokemonRepository.add({ name: 'Quaxwell', height: 1.2, type: ['Water'] });
 
-/*  have used forEach instead of the usual for loop to loop around all entries
-    since the list is protected by IIFE */
 pokemonRepository.getAll().forEach(function(pokemon) {
-    //  for the pokemons with height more than 1m, Wow that's big shall be shown next to it
-    if (pokemon.height >=1) {
-        document.write(pokemon.name + " (height: " + pokemon.height + "m) - Wow, that's big!" + "<br>")
-        }
-    else if (pokemon.height >= 0.6 && pokemon.height < 1) {
-        document.write(pokemon.name + " (height: " + pokemon.height + "m) - That's a small pokemon!" + "<br>")
-        }
-    else {
-        document.write(pokemon.name + " (height: " + pokemon.height + "m) - That's a very small pokemon!" + "<br>")
-        }
-});
+    pokemonRepository.addListItem(pokemon);
+  });
