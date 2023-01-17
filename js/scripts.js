@@ -1,45 +1,13 @@
 /*  defined pokemonRepository and wrap in IIFE to avoid accidentally 
     accessing the global state */
 let pokemonRepository = (function() {
-    let pokemonList = [
-        {
-            name: "Butterfree",
-            height: 1.1,
-            type: ["bug","flying"],
-        },
-
-        {
-            name: "Charizad",
-            height: 1.7,
-            type: ["fire","flying"],
-        },
-
-        {
-            name: "Bulbasaur",
-            height: 0.7,
-            type: ["grass", "poison"]
-        },
-
-        {
-            name: "Ivysaur",
-            height: 1,
-            type: ["grass", "poison"]
-        },
-
-        {
-            name: "Venusaur",
-            height: 2,
-            type: ["grass", "poison"]
-        },
-
-        {
-            name: "Metapod",
-            height : 0.7,
-            type: "bug",
-        }
-    ]
+    let pokemonList = []
+    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150';
 
     function add(pokemon){
+        "name" in pokemon &&
+        "detailsUrl" in pokemon &&
+        "imageURL" in pokemon
         pokemonList.push(pokemon);
     }
 
@@ -61,24 +29,56 @@ let pokemonRepository = (function() {
         repository.appendChild(listPokemon);
     }
 
-    // this logs data in console, later task this function will be expanded
+    /* getting data from the pokemon API using promise */  
+    function loadList() {
+        return fetch(apiUrl).then(function (response) {
+            return response.json();
+        }).then(function (json) {
+            json.results.forEach(function (item) {
+            let pokemon = {
+                name: item.name,
+                detailsUrl: item.url
+            };
+            add(pokemon);
+            });
+        }).catch(function (e) {
+            console.error(e);
+        })
+    }
+
+    function loadDetails(item) {
+        let url = item.detailsUrl;
+        return fetch(url).then(function (response) {
+          return response.json();
+        }).then(function (details) {
+          item.imageUrl = details.sprites.front_default;
+          item.height = details.height;
+          item.types = details.types;
+        }).catch(function (e) {     
+          console.error(e);
+        });
+    }
+
     function showDetails(pokemon){
-        console.log(pokemon);
-      }
+        loadDetails(pokemon).then(function(){
+            console.log(pokemon);
+        });
+    }
 
     return {
         add: add,
         getAll: getAll,
-        addListItem: addListItem
+        addListItem: addListItem,
+        loadList: loadList,
+        loadDetails: loadDetails,
+        showDetails: showDetails
     };
 
 }) ();
 
-//  adding new Pokemons with the new add function
-pokemonRepository.add({ name: 'Floragato', height: 0.9, type: ['Grass'] });
-pokemonRepository.add({ name: 'Crocalor', height: 1.0, type: ['Fire'] });
-pokemonRepository.add({ name: 'Quaxwell', height: 1.2, type: ['Water'] });
-
-pokemonRepository.getAll().forEach(function(pokemon) {
-    pokemonRepository.addListItem(pokemon);
-  });
+/* this displays all the pokemons from the API list*/
+pokemonRepository.loadList().then(function() {
+    pokemonRepository.getAll().forEach(function(pokemon) {
+        pokemonRepository.addListItem(pokemon);
+    });
+});
