@@ -13,7 +13,8 @@ It loads data from an external API and enables the viewing of Pokémon details o
 - On user action (e.g., by clicking on a list item), view details for that item
 - Details include height, types and abilities along with images of Pokémon (front and back view).
 
-<img width="956" alt="sample" src="https://user-images.githubusercontent.com/39118847/214555810-aaaa7f44-a32a-4ca0-9ed1-b34e68fb4cad.png">
+<img width="960" alt="sample_2" src="https://user-images.githubusercontent.com/39118847/214558401-3d5ee4b0-beb4-4a70-b7bf-35474a104c18.png">
+
 
 ## Links
 
