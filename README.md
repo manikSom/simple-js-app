@@ -1,4 +1,4 @@
-# Pokédex App
+# PokéWiki App
 
 ## Overview
 
@@ -18,7 +18,6 @@ It loads data from an external API and enables the viewing of Pokémon details o
 - [Code URL](https://github.com/manikSom/simple-js-app)
 - [Live Site URL](https://manikSom.github.io/simple-js-app/)
 
-## Process
 
 ### Programming Languages
 
